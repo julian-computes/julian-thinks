@@ -3,6 +3,7 @@ import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 ---
 
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header>
 	<nav aria-label="Main">
 		<a class="site-title" href="/">{SITE_TITLE}</a>
@@ -14,6 +15,20 @@ import HeaderLink from './HeaderLink.astro';
 </header>
 
 <style>
+	.skip-link {
+		position: absolute;
+		left: -9999px;
+		top: 0;
+		padding: 0.5rem 1rem;
+		font-size: 0.875rem;
+		text-decoration: none;
+		z-index: 100;
+	}
+
+	.skip-link:focus {
+		left: 0;
+	}
+
 	header {
 		margin-bottom: 2.5rem;
 		border-bottom: 1px solid rgba(128, 128, 128, 0.2);
