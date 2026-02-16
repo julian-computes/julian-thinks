@@ -72,6 +72,9 @@ test("createNewPostPlan combines pure pieces into a deterministic plan", () => {
   assert.equal(plan.index, 2);
   assert.equal(plan.title, "starting a blog");
   assert.equal(plan.fileName, "2-starting-a-blog.md");
-  assert.equal(plan.filePath, "src/content/blog/2026/02/16/2-starting-a-blog.md");
+  assert.equal(
+    plan.filePath,
+    "src/content/blog/2026/02/16/2-starting-a-blog.md",
+  );
   assert.match(plan.content, /^---\n/);
 });

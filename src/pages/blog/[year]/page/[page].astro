@@ -1,24 +1,24 @@
 ---
-import PostList from '../../../../components/PostList.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../../../consts';
+import PostList from "../../../../components/PostList.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../../../consts";
 import {
-	filterByPrefix,
-	getSortedPosts,
-	getUniqueYears,
-	paginate,
-} from '../../../../lib/blog';
+  filterByPrefix,
+  getSortedPosts,
+  getUniqueYears,
+  paginate,
+} from "../../../../lib/blog";
 
 export async function getStaticPaths() {
-	const allPosts = await getSortedPosts();
-	const paths: { params: { year: string; page: string } }[] = [];
-	for (const year of getUniqueYears(allPosts)) {
-		const posts = filterByPrefix(allPosts, `${year}/`);
-		const { totalPages } = paginate(posts, 1);
-		for (let i = 2; i <= totalPages; i++) {
-			paths.push({ params: { year, page: String(i) } });
-		}
-	}
-	return paths;
+  const allPosts = await getSortedPosts();
+  const paths: { params: { year: string; page: string } }[] = [];
+  for (const year of getUniqueYears(allPosts)) {
+    const posts = filterByPrefix(allPosts, `${year}/`);
+    const { totalPages } = paginate(posts, 1);
+    for (let i = 2; i <= totalPages; i++) {
+      paths.push({ params: { year, page: String(i) } });
+    }
+  }
+  return paths;
 }
 
 const { year, page: pageParam } = Astro.params;
@@ -28,10 +28,10 @@ const { items, page, totalPages } = paginate(posts, pageNum);
 ---
 
 <PostList
-	posts={items}
-	page={page}
-	totalPages={totalPages}
-	basePath={`/blog/${year}/`}
-	title={`${year} — ${SITE_TITLE}`}
-	description={SITE_DESCRIPTION}
+  posts={items}
+  page={page}
+  totalPages={totalPages}
+  basePath={`/blog/${year}/`}
+  title={`${year} — ${SITE_TITLE}`}
+  description={SITE_DESCRIPTION}
 />

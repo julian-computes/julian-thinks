@@ -1,63 +1,63 @@
 ---
-import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+import { SITE_TITLE } from "../consts";
+import HeaderLink from "./HeaderLink.astro";
 ---
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header>
-	<nav aria-label="Main">
-		<a class="site-title" href="/">{SITE_TITLE}</a>
-		<div class="nav-links">
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
-	</nav>
+  <nav aria-label="Main">
+    <a class="site-title" href="/">{SITE_TITLE}</a>
+    <div class="nav-links">
+      <HeaderLink href="/blog">Blog</HeaderLink>
+      <HeaderLink href="/about">About</HeaderLink>
+    </div>
+  </nav>
 </header>
 
 <style>
-	.skip-link {
-		position: absolute;
-		left: -9999px;
-		top: 0;
-		padding: 0.5rem 1rem;
-		font-size: 0.875rem;
-		text-decoration: none;
-		z-index: 100;
-	}
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+    z-index: 100;
+  }
 
-	.skip-link:focus {
-		left: 0;
-	}
+  .skip-link:focus {
+    left: 0;
+  }
 
-	header {
-		margin-bottom: 2.5rem;
-		border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-	}
+  header {
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+  }
 
-	nav {
-		display: flex;
-		align-items: baseline;
-		flex-wrap: wrap;
-		gap: 0.5rem 2rem;
-		padding: 1.25rem 0;
-	}
+  nav {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    padding: 1.25rem 0;
+  }
 
-	.site-title {
-		font-size: 1.1rem;
-		font-weight: 700;
-		letter-spacing: 0.02em;
-		text-decoration: none;
-		color: inherit;
-		transition: opacity 150ms ease;
-	}
+  .site-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 150ms ease;
+  }
 
-	.site-title:hover,
-	.site-title:focus-visible {
-		opacity: 0.6;
-	}
+  .site-title:hover,
+  .site-title:focus-visible {
+    opacity: 0.6;
+  }
 
-	.nav-links {
-		display: flex;
-		gap: 0.25rem;
-	}
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+  }
 </style>

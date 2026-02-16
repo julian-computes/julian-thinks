@@ -1,12 +1,12 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import { SITE_TITLE } from '../consts';
+import "../styles/global.css";
+import { SITE_TITLE } from "../consts";
 
 interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -17,8 +17,8 @@ const { title, description } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta
-	http-equiv="Content-Security-Policy"
-	content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
 />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -29,10 +29,10 @@ const { title, description } = Astro.props;
 <link rel="manifest" href="/site.webmanifest" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_TITLE}
+  href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
@@ -57,9 +57,12 @@ const { title, description } = Astro.props;
 <meta property="twitter:description" content={description} />
 
 <!-- Structured Data -->
-<script type="application/ld+json" set:html={JSON.stringify({
-	"@context": "https://schema.org",
-	"@type": "WebSite",
-	"name": SITE_TITLE,
-	"url": Astro.site,
-})} />
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_TITLE,
+    url: Astro.site,
+  })}
+/>

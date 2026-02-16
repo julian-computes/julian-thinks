@@ -56,19 +56,11 @@ export function buildPostFileName({ index, slug }) {
   return `${index}-${slug}.md`;
 }
 
-export function buildPostPath({
-  directory = BLOG_DIR,
-  dateDir,
-  index,
-  slug,
-}) {
+export function buildPostPath({ directory = BLOG_DIR, dateDir, index, slug }) {
   return path.join(directory, dateDir, buildPostFileName({ index, slug }));
 }
 
-export function buildFrontmatter({
-  title,
-  description = DEFAULT_DESCRIPTION,
-}) {
+export function buildFrontmatter({ title, description = DEFAULT_DESCRIPTION }) {
   return [
     "---",
     `title: '${title}'`,

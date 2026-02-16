@@ -10,11 +10,7 @@
  */
 import fs from "node:fs/promises";
 import path from "node:path";
-import {
-  BLOG_DIR,
-  createNewPostPlan,
-  toDateDir,
-} from "./new-post-core.js";
+import { BLOG_DIR, createNewPostPlan, toDateDir } from "./new-post-core.js";
 
 export async function listExistingFileNames(directory) {
   try {

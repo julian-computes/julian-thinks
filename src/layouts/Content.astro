@@ -1,100 +1,111 @@
 ---
-import { Image } from 'astro:assets';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
-import { SITE_TITLE } from '../consts';
+import { Image } from "astro:assets";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE } from "../consts";
 
 interface Props {
-	title: string;
-	description: string;
-	pubDate?: Date;
-	updatedDate?: Date;
-	heroImage?: ImageMetadata;
+  title: string;
+  description: string;
+  pubDate?: Date;
+  updatedDate?: Date;
+  heroImage?: ImageMetadata;
 }
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
-const blogPostingSchema = pubDate ? JSON.stringify({
-	"@context": "https://schema.org",
-	"@type": "BlogPosting",
-	"headline": title,
-	"description": description,
-	"datePublished": pubDate.toISOString(),
-	...(updatedDate && { "dateModified": updatedDate.toISOString() }),
-	"author": {
-		"@type": "Person",
-		"name": "Julian Fernandez",
-	},
-	"publisher": {
-		"@type": "Person",
-		"name": "Julian Fernandez",
-	},
-	"isPartOf": {
-		"@type": "Blog",
-		"name": SITE_TITLE,
-		"url": Astro.site,
-	},
-}) : null;
+const blogPostingSchema = pubDate
+  ? JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: title,
+      description: description,
+      datePublished: pubDate.toISOString(),
+      ...(updatedDate && { dateModified: updatedDate.toISOString() }),
+      author: {
+        "@type": "Person",
+        name: "Julian Fernandez",
+      },
+      publisher: {
+        "@type": "Person",
+        name: "Julian Fernandez",
+      },
+      isPartOf: {
+        "@type": "Blog",
+        name: SITE_TITLE,
+        url: Astro.site,
+      },
+    })
+  : null;
 ---
 
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		{blogPostingSchema && <script type="application/ld+json" set:html={blogPostingSchema} />}
-	</head>
+  <head>
+    <BaseHead title={title} description={description} />
+    {
+      blogPostingSchema && (
+        <script type="application/ld+json" set:html={blogPostingSchema} />
+      )
+    }
+  </head>
 
-	<body>
-		<Header />
-		<main id="main-content">
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<h1>{title}</h1>
-						<div class="date">
-							{pubDate && <FormattedDate date={pubDate} />}
-							{updatedDate && (
-								<div class="last-updated-on">
-									Last updated on <FormattedDate date={updatedDate} />
-								</div>
-							)}
-						</div>
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-<style>
-	article {
-		max-width: 120ch;
-	}
+  <body>
+    <Header />
+    <main id="main-content">
+      <article>
+        <div class="hero-image">
+          {
+            heroImage && (
+              <Image width={1020} height={510} src={heroImage} alt="" />
+            )
+          }
+        </div>
+        <div class="prose">
+          <div class="title">
+            <h1>{title}</h1>
+            <div class="date">
+              {pubDate && <FormattedDate date={pubDate} />}
+              {
+                updatedDate && (
+                  <div class="last-updated-on">
+                    Last updated on <FormattedDate date={updatedDate} />
+                  </div>
+                )
+              }
+            </div>
+          </div>
+          <slot />
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body><style>
+    article {
+      max-width: 120ch;
+    }
 
-	.prose {
-		line-height: 1.7;
-	}
+    .prose {
+      line-height: 1.7;
+    }
 
-	.title h1 {
-		margin-bottom: 0.25rem;
-	}
+    .title h1 {
+      margin-bottom: 0.25rem;
+    }
 
-	.date {
-		margin-bottom: 1.5rem;
-		color: #64748b;
-	}
+    .date {
+      margin-bottom: 1.5rem;
+      color: #64748b;
+    }
 
-	.hero-image {
-		margin-bottom: 2rem;
-	}
+    .hero-image {
+      margin-bottom: 2rem;
+    }
 
-	.hero-image img {
-		width: 100%;
-		height: auto;
-		border-radius: 0.5rem;
-	}
-</style>
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+    }
+  </style>
 </html>
