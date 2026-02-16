@@ -8,7 +8,7 @@ import Header from '../components/Header.astro';
 interface Props {
 	title: string;
 	description: string;
-	pubDate: Date;
+	pubDate?: Date;
 	updatedDate?: Date;
 	heroImage?: ImageMetadata;
 }
@@ -32,14 +32,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 					<div class="title">
 						<h1>{title}</h1>
 						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
+							{pubDate && <FormattedDate date={pubDate} />}
+							{updatedDate && (
+								<div class="last-updated-on">
+									Last updated on <FormattedDate date={updatedDate} />
+								</div>
+							)}
 						</div>
 					</div>
 					<slot />
@@ -50,9 +48,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</body>
 <style>
 	article {
-		max-width: 65ch;
-		margin-inline: auto;
-		padding-inline: 1.5rem;
+		max-width: 120ch;
 	}
 
 	.prose {
