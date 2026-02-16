@@ -25,10 +25,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: lts/*
-    # If you have a different build process, replace this with your own build steps
-    - name: Install deps and build
+    - name: Install deps, build, and test
       run: |
         npm i
+        npm test
         npm run build
     - name: Deploy to neocities
       uses: bcomnes/deploy-to-neocities@v3.0.4
