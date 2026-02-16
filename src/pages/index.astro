@@ -1,20 +1,11 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
 import Layout from "../layouts/Content.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Layout
-			title="Welcome"
-			description="Welcome"
-		>
-			<p>I'm Julian and this is where I write things.</p>
-		</Layout>
-	</body>
-</html>
+<Layout
+	title={SITE_TITLE}
+	description={SITE_DESCRIPTION}
+>
+	<p>I'm Julian and this is where I write things.</p>
+</Layout>
