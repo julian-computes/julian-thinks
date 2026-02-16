@@ -29,13 +29,9 @@ jobs:
       run: |
         npm i
         npm run build
-    # When the dist_dir is ready, deploy it to neocities
-    # Here we deploy the folder named `public`
-    - name: Deploy to neocities
-      uses: bcomnes/deploy-to-neocities@v3.0.4
+    - name: Deploy to Neocities
+      uses: bcomnes/deploy-to-neocities@v1.1.13
       with:
-        api_key: ${{ secrets.NEOCITIES_API_KEY }}
-        cleanup: true
-        neocities_supporter: true # set this to true if you have a supporter account and want to bypass unsuported files filter.
-        preview_before_deploy: true # print a deployment plan prior to waiting for files to upload.
+        api_token: ${{ secrets.NEOCITIES_API_KEY }}
+        cleanup: false
         dist_dir: dist
