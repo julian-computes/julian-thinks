@@ -10,52 +10,48 @@
  */
 import fs from "node:fs/promises";
 import path from "node:path";
-import {
-  BLOG_DIR,
-  createNewPostPlan,
-  toDateDir,
-} from "./new-post-core.js";
+import { BLOG_DIR, createNewPostPlan, toDateDir } from "./new-post-core.js";
 
 export async function listExistingFileNames(directory) {
-  try {
-    const entries = await fs.readdir(directory, { withFileTypes: true });
-    return entries.filter((entry) => entry.isFile()).map((entry) => entry.name);
-  } catch (error) {
-    if (error && error.code === "ENOENT") {
-      return [];
-    }
-    throw error;
-  }
+	try {
+		const entries = await fs.readdir(directory, { withFileTypes: true });
+		return entries.filter((entry) => entry.isFile()).map((entry) => entry.name);
+	} catch (error) {
+		if (error && error.code === "ENOENT") {
+			return [];
+		}
+		throw error;
+	}
 }
 
 export async function writeNewPostFile(filePath, content) {
-  await fs.writeFile(filePath, content, { encoding: "utf8", flag: "wx" });
+	await fs.writeFile(filePath, content, { encoding: "utf8", flag: "wx" });
 }
 
 export async function run(argv) {
-  const slug = argv[2];
-  if (!slug) {
-    throw new Error("Usage: node scripts/new-post.js <slug>");
-  }
+	const slug = argv[2];
+	if (!slug) {
+		throw new Error("Usage: node scripts/new-post.js <slug>");
+	}
 
-  const dateDir = toDateDir(new Date());
-  const dayDir = path.join(BLOG_DIR, dateDir);
-  await fs.mkdir(dayDir, { recursive: true });
-  const existingFileNames = await listExistingFileNames(dayDir);
-  const plan = createNewPostPlan({ slug, existingFileNames });
-  const targetPath = path.resolve(plan.filePath);
+	const dateDir = toDateDir(new Date());
+	const dayDir = path.join(BLOG_DIR, dateDir);
+	await fs.mkdir(dayDir, { recursive: true });
+	const existingFileNames = await listExistingFileNames(dayDir);
+	const plan = createNewPostPlan({ slug, existingFileNames });
+	const targetPath = path.resolve(plan.filePath);
 
-  await writeNewPostFile(targetPath, plan.content);
-  return plan.filePath;
+	await writeNewPostFile(targetPath, plan.content);
+	return plan.filePath;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  run(process.argv)
-    .then((createdPath) => {
-      console.log(`Created ${createdPath}`);
-    })
-    .catch((error) => {
-      console.error(error.message);
-      process.exit(1);
-    });
+	run(process.argv)
+		.then((createdPath) => {
+			console.log(`Created ${createdPath}`);
+		})
+		.catch((error) => {
+			console.error(error.message);
+			process.exit(1);
+		});
 }

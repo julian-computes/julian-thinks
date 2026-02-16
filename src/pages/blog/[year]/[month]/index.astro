@@ -1,13 +1,13 @@
 ---
-import PostList from '../../../../components/PostList.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../../../consts';
+import PostList from "../../../../components/PostList.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../../../consts";
 import {
 	filterByPrefix,
 	getSortedPosts,
 	getUniqueMonths,
 	getUniqueYears,
 	paginate,
-} from '../../../../lib/blog';
+} from "../../../../lib/blog";
 
 export async function getStaticPaths() {
 	const posts = await getSortedPosts();

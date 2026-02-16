@@ -1,10 +1,10 @@
 ---
-import { Image } from 'astro:assets';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
-import { SITE_TITLE } from '../consts';
+import { Image } from "astro:assets";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE } from "../consts";
 
 interface Props {
 	title: string;
@@ -15,27 +15,29 @@ interface Props {
 }
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
-const blogPostingSchema = pubDate ? JSON.stringify({
-	"@context": "https://schema.org",
-	"@type": "BlogPosting",
-	"headline": title,
-	"description": description,
-	"datePublished": pubDate.toISOString(),
-	...(updatedDate && { "dateModified": updatedDate.toISOString() }),
-	"author": {
-		"@type": "Person",
-		"name": "Julian Fernandez",
-	},
-	"publisher": {
-		"@type": "Person",
-		"name": "Julian Fernandez",
-	},
-	"isPartOf": {
-		"@type": "Blog",
-		"name": SITE_TITLE,
-		"url": Astro.site,
-	},
-}) : null;
+const blogPostingSchema = pubDate
+	? JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "BlogPosting",
+			headline: title,
+			description: description,
+			datePublished: pubDate.toISOString(),
+			...(updatedDate && { dateModified: updatedDate.toISOString() }),
+			author: {
+				"@type": "Person",
+				name: "Julian Fernandez",
+			},
+			publisher: {
+				"@type": "Person",
+				name: "Julian Fernandez",
+			},
+			isPartOf: {
+				"@type": "Blog",
+				name: SITE_TITLE,
+				url: Astro.site,
+			},
+		})
+	: null;
 ---
 
 <html lang="en">
