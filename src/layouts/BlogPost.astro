@@ -43,4 +43,34 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		</main>
 		<Footer />
 	</body>
+<style>
+	article {
+		max-width: 65ch;
+		margin-inline: auto;
+		padding-inline: 1.5rem;
+	}
+
+	.prose {
+		line-height: 1.7;
+	}
+
+	.title h1 {
+		margin-bottom: 0.25rem;
+	}
+
+	.date {
+		margin-bottom: 1.5rem;
+		color: #64748b;
+	}
+
+	.hero-image {
+		margin-bottom: 2rem;
+	}
+
+	.hero-image img {
+		width: 100%;
+		height: auto;
+		border-radius: 0.5rem;
+	}
+</style>
 </html>
