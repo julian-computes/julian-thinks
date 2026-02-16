@@ -6,15 +6,21 @@ import FormattedDate from "@/components/FormattedDate.astro";
 import Header from "@/components/Header.astro";
 import { SITE_TITLE } from "@/consts";
 
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
 interface Props {
   title: string;
   description: string;
   pubDate?: Date;
   updatedDate?: Date;
   heroImage?: ImageMetadata;
+  breadcrumbs?: BreadcrumbItem[];
 }
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, breadcrumbs = [] } = Astro.props;
 const blogPostingSchema = pubDate
   ? JSON.stringify({
       "@context": "https://schema.org",
@@ -62,6 +68,25 @@ const blogPostingSchema = pubDate
           }
         </div>
         <div class="prose">
+          {
+            breadcrumbs.length > 0 && (
+              <nav class="breadcrumbs" aria-label="Post breadcrumbs">
+                <ul class="breadcrumb-trail">
+                  {breadcrumbs.map((item, index) => (
+                    <li>
+                      {item.href && index !== breadcrumbs.length - 1 ? (
+                        <a href={item.href}>{item.label}</a>
+                      ) : (
+                        <span aria-current={index === breadcrumbs.length - 1 ? "page" : undefined}>
+                          {item.label}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )
+          }
           <div class="title">
             <h1>{title}</h1>
             <div class="date">
@@ -87,6 +112,31 @@ const blogPostingSchema = pubDate
 
     .prose {
       line-height: 1.7;
+    }
+
+    .breadcrumbs {
+      margin-bottom: 1rem;
+    }
+
+    .breadcrumb-trail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.6rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    .breadcrumb-trail li {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .breadcrumb-trail li + li::before {
+      content: "/";
+      margin-right: 0.6rem;
+      opacity: 0.45;
     }
 
     .title h1 {
