@@ -14,11 +14,11 @@ import path from "node:path";
 export const BLOG_DIR = "src/content/blog";
 export const DEFAULT_DESCRIPTION = "Lorem ipsum dolor sit amet";
 
-export function toDatePrefix(date) {
-  const year = String(date.getFullYear()).slice(-2);
+export function toDateDir(date) {
+  const year = String(date.getFullYear());
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return path.join(year, month, day);
 }
 
 export function toPubDate(date) {
@@ -37,17 +37,12 @@ export function isMarkdownPostFile(fileName) {
   return fileName.endsWith(".md") || fileName.endsWith(".mdx");
 }
 
-export function parsePostIndex(fileName, datePrefix) {
+export function parsePostIndex(fileName) {
   if (!isMarkdownPostFile(fileName)) {
     return null;
   }
 
-  if (!fileName.startsWith(`${datePrefix}-`)) {
-    return null;
-  }
-
-  const rest = fileName.slice(`${datePrefix}-`.length);
-  const [indexPart] = rest.split("-", 1);
+  const [indexPart] = fileName.split("-", 1);
 
   if (!/^\d+$/.test(indexPart)) {
     return null;
@@ -56,26 +51,26 @@ export function parsePostIndex(fileName, datePrefix) {
   return Number(indexPart);
 }
 
-export function getNextIndex(fileNames, datePrefix) {
+export function getNextIndex(fileNames) {
   const maxIndex = fileNames.reduce((max, fileName) => {
-    const index = parsePostIndex(fileName, datePrefix);
+    const index = parsePostIndex(fileName);
     return index === null ? max : Math.max(max, index);
   }, -1);
 
   return maxIndex + 1;
 }
 
-export function buildPostFileName({ datePrefix, index, slug }) {
-  return `${datePrefix}-${index}-${slug}.md`;
+export function buildPostFileName({ index, slug }) {
+  return `${index}-${slug}.md`;
 }
 
 export function buildPostPath({
   directory = BLOG_DIR,
-  datePrefix,
+  dateDir,
   index,
   slug,
 }) {
-  return path.join(directory, buildPostFileName({ datePrefix, index, slug }));
+  return path.join(directory, dateDir, buildPostFileName({ index, slug }));
 }
 
 export function buildFrontmatter({
@@ -99,16 +94,16 @@ export function createNewPostPlan({
   now = new Date(),
   directory = BLOG_DIR,
 }) {
-  const datePrefix = toDatePrefix(now);
+  const dateDir = toDateDir(now);
   const pubDate = toPubDate(now);
-  const index = getNextIndex(existingFileNames, datePrefix);
+  const index = getNextIndex(existingFileNames);
   const title = toDisplayTitle(slug);
-  const fileName = buildPostFileName({ datePrefix, index, slug });
-  const filePath = path.join(directory, fileName);
+  const fileName = buildPostFileName({ index, slug });
+  const filePath = path.join(directory, dateDir, fileName);
   const content = buildFrontmatter({ title, pubDate });
 
   return {
-    datePrefix,
+    dateDir,
     pubDate,
     index,
     title,

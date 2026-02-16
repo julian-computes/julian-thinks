@@ -13,6 +13,7 @@ import path from "node:path";
 import {
   BLOG_DIR,
   createNewPostPlan,
+  toDateDir,
 } from "./new-post-core.js";
 
 export async function listExistingFileNames(directory) {
@@ -37,8 +38,10 @@ export async function run(argv) {
     throw new Error("Usage: node scripts/new-post.js <slug>");
   }
 
-  await fs.mkdir(BLOG_DIR, { recursive: true });
-  const existingFileNames = await listExistingFileNames(BLOG_DIR);
+  const dateDir = toDateDir(new Date());
+  const dayDir = path.join(BLOG_DIR, dateDir);
+  await fs.mkdir(dayDir, { recursive: true });
+  const existingFileNames = await listExistingFileNames(dayDir);
   const plan = createNewPostPlan({ slug, existingFileNames });
   const targetPath = path.resolve(plan.filePath);
 
