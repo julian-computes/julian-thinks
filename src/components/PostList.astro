@@ -14,9 +14,11 @@ interface Props {
   basePath: string;
   title: string;
   description: string;
+  breadcrumbs?: { label: string; href?: string }[];
 }
 
-const { posts, page, totalPages, basePath, title, description } = Astro.props;
+const { posts, page, totalPages, basePath, title, description, breadcrumbs = [] } =
+  Astro.props;
 const prev = prevPageHref(basePath, page);
 const next = nextPageHref(basePath, page, totalPages);
 ---
@@ -29,12 +31,31 @@ const next = nextPageHref(basePath, page, totalPages);
   <body>
     <Header />
     <main id="main-content">
+      {
+        breadcrumbs.length > 0 && (
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+              {breadcrumbs.map((item, index) => (
+                <li>
+                  {item.href && index !== breadcrumbs.length - 1 ? (
+                    <a href={item.href}>{item.label}</a>
+                  ) : (
+                    <span aria-current={index === breadcrumbs.length - 1 ? "page" : undefined}>
+                      {item.label}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
       <section aria-label="Blog posts">
-        <ul>
+        <ul class="post-list">
           {
             posts.map((post) => (
               <li>
-                <a href={`/blog/${post.id}/`}>
+                <a class="post-link" href={`/blog/${post.id}/`}>
                   {post.data.heroImage && (
                     <Image
                       width={720}
@@ -70,34 +91,34 @@ const next = nextPageHref(basePath, page, totalPages);
 </html>
 
 <style>
-  ul {
+  .post-list {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  li {
+  .post-list li {
     padding: 1.25rem 0;
     border-bottom: 1px solid rgba(128, 128, 128, 0.2);
   }
 
-  li:first-child {
+  .post-list li:first-child {
     padding-top: 0;
   }
 
-  li:last-child {
+  .post-list li:last-child {
     border-bottom: none;
   }
 
-  a {
+  .post-link {
     display: block;
     text-decoration: none;
     color: inherit;
     transition: opacity 150ms ease;
   }
 
-  a:hover,
-  a:focus-visible {
+  .post-link:hover,
+  .post-link:focus-visible {
     opacity: 0.6;
   }
 
@@ -127,5 +148,30 @@ const next = nextPageHref(basePath, page, totalPages);
   .page-info {
     font-size: 0.85rem;
     opacity: 0.5;
+  }
+
+  .breadcrumbs {
+    margin: 0 0 1rem;
+  }
+
+  .breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+
+  .breadcrumbs li {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .breadcrumbs li + li::before {
+    content: "/";
+    margin-right: 0.5rem;
+    opacity: 0.45;
   }
 </style>

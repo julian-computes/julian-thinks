@@ -23,6 +23,10 @@ export async function getStaticPaths() {
 const { year, month } = Astro.params;
 const posts = filterByPrefix(await getSortedPosts(), `${year}/${month}/`);
 const { items, page, totalPages } = paginate(posts, 1);
+const monthLabel = new Date(Number(year), Number(month) - 1, 1).toLocaleString(
+  "en-US",
+  { month: "long" },
+);
 ---
 
 <PostList
@@ -32,4 +36,9 @@ const { items, page, totalPages } = paginate(posts, 1);
   basePath={`/blog/${year}/${month}/`}
   title={`${year}/${month} — ${SITE_TITLE}`}
   description={SITE_DESCRIPTION}
+  breadcrumbs={[
+    { label: "Blog", href: "/blog/" },
+    { label: year!, href: `/blog/${year}/` },
+    { label: monthLabel },
+  ]}
 />

@@ -27,4 +27,5 @@ const { items, page, totalPages } = paginate(posts, 1);
   basePath={`/blog/${year}/`}
   title={`${year} — ${SITE_TITLE}`}
   description={SITE_DESCRIPTION}
+  breadcrumbs={[{ label: "Blog", href: "/blog/" }, { label: year! }]}
 />

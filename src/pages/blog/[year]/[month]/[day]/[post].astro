@@ -1,27 +1,173 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { type CollectionEntry, render } from "astro:content";
 import BlogPost from "@/layouts/Content.astro";
-import { pubDateFromId } from "@/lib/blog";
+import { getSortedPosts, pubDateFromId } from "@/lib/blog";
+
+interface NavItem {
+  href: string;
+  label: string;
+}
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => {
+  const posts = await getSortedPosts();
+  return posts.map((post, index) => {
     const [year, month, day, ...rest] = post.id.split("/");
+    const monthPrefix = `${year}/${month}/`;
+    const yearPrefix = `${year}/`;
+
+    const previousPost = posts[index + 1];
+    const nextPost = posts[index - 1];
+
+    const sameMonthPosts = posts
+      .filter((item) => item.id.startsWith(monthPrefix) && item.id !== post.id)
+      .map((item) => ({
+        href: `/blog/${item.id}/`,
+        label: item.data.title,
+      }));
+
+    const sameYearPosts = posts
+      .filter(
+        (item) =>
+          item.id.startsWith(yearPrefix) &&
+          !item.id.startsWith(monthPrefix) &&
+          item.id !== post.id,
+      )
+      .map((item) => ({
+        href: `/blog/${item.id}/`,
+        label: item.data.title,
+      }));
+
     return {
       params: { year, month, day, post: rest.join("/") },
-      props: { entry: post },
+      props: {
+        entry: post,
+        year,
+        month,
+        previousPost: previousPost
+          ? { href: `/blog/${previousPost.id}/`, label: previousPost.data.title }
+          : null,
+        nextPost: nextPost
+          ? { href: `/blog/${nextPost.id}/`, label: nextPost.data.title }
+          : null,
+        sameMonthPosts,
+        sameYearPosts,
+      },
     };
   });
 }
 
 interface Props {
   entry: CollectionEntry<"blog">;
+  year: string;
+  month: string;
+  previousPost: NavItem | null;
+  nextPost: NavItem | null;
+  sameMonthPosts: NavItem[];
+  sameYearPosts: NavItem[];
 }
 
-const { entry } = Astro.props;
+const { entry, year, month, previousPost, nextPost, sameMonthPosts, sameYearPosts } =
+  Astro.props;
 const { Content } = await render(entry);
+const monthLabel = new Date(Number(year), Number(month) - 1, 1).toLocaleString(
+  "en-US",
+  { month: "long" },
+);
 ---
 
 <BlogPost {...entry.data} pubDate={pubDateFromId(entry.id)}>
+  <nav class="breadcrumbs" aria-label="Post breadcrumbs">
+    <ol class="breadcrumb-trail">
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href={`/blog/${year}/`}>{year}</a></li>
+      <li><a href={`/blog/${year}/${month}/`}>{monthLabel}</a></li>
+      <li aria-current="page">{entry.data.title}</li>
+    </ol>
+
+    {
+      (previousPost || nextPost) && (
+        <ol class="breadcrumb-trail breadcrumb-trail-secondary">
+          <li>
+            {previousPost ? (
+              <a href={previousPost.href}>Previous: {previousPost.label}</a>
+            ) : (
+              <span>Previous: none</span>
+            )}
+          </li>
+          <li>
+            {nextPost ? (
+              <a href={nextPost.href}>Next: {nextPost.label}</a>
+            ) : (
+              <span>Next: none</span>
+            )}
+          </li>
+        </ol>
+      )
+    }
+
+    {
+      sameMonthPosts.length > 0 && (
+        <ol class="breadcrumb-trail breadcrumb-trail-secondary">
+          <li>
+            <a href={`/blog/${year}/${month}/`}>
+              Same month ({monthLabel} {year})
+            </a>
+          </li>
+          {sameMonthPosts.map((post) => (
+            <li><a href={post.href}>{post.label}</a></li>
+          ))}
+        </ol>
+      )
+    }
+
+    {
+      sameYearPosts.length > 0 && (
+        <ol class="breadcrumb-trail breadcrumb-trail-secondary">
+          <li><a href={`/blog/${year}/`}>Same year ({year})</a></li>
+          {sameYearPosts.map((post) => (
+            <li><a href={post.href}>{post.label}</a></li>
+          ))}
+        </ol>
+      )
+    }
+  </nav>
   <Content />
 </BlogPost>
+
+<style>
+  .breadcrumbs {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+    padding-bottom: 1rem;
+  }
+
+  .breadcrumb-trail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  .breadcrumb-trail li {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .breadcrumb-trail li + li::before {
+    content: "/";
+    margin-right: 0.6rem;
+    opacity: 0.45;
+  }
+
+  .breadcrumb-trail-secondary {
+    font-size: 0.86rem;
+    opacity: 0.9;
+  }
+
+  .breadcrumb-trail:last-child {
+    margin-bottom: 0;
+  }
+</style>
