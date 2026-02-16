@@ -8,17 +8,11 @@ import {
   parsePostIndex,
   toDateDir,
   toDisplayTitle,
-  toPubDate,
 } from "../scripts/new-post-core.js";
 
 test("toDateDir formats as YYYY/MM/DD", () => {
   const result = toDateDir(new Date("2026-02-16T12:00:00Z"));
   assert.equal(result, "2026/02/16");
-});
-
-test("toPubDate formats as Mon dd yyyy", () => {
-  const result = toPubDate(new Date("2026-02-16T12:00:00Z"));
-  assert.equal(result, "Feb 16, 2026");
 });
 
 test("toDisplayTitle replaces hyphens with spaces", () => {
@@ -53,7 +47,6 @@ test("buildPostFileName returns expected output", () => {
 test("buildFrontmatter creates stable frontmatter block", () => {
   const result = buildFrontmatter({
     title: "starting a blog",
-    pubDate: "Feb 16, 2026",
   });
 
   assert.equal(
@@ -62,7 +55,6 @@ test("buildFrontmatter creates stable frontmatter block", () => {
       "---",
       "title: 'starting a blog'",
       "description: 'Lorem ipsum dolor sit amet'",
-      "pubDate: 'Feb 16, 2026'",
       "---",
       "",
     ].join("\n"),
@@ -77,7 +69,6 @@ test("createNewPostPlan combines pure pieces into a deterministic plan", () => {
   });
 
   assert.equal(plan.dateDir, "2026/02/16");
-  assert.equal(plan.pubDate, "Feb 16, 2026");
   assert.equal(plan.index, 2);
   assert.equal(plan.title, "starting a blog");
   assert.equal(plan.fileName, "2-starting-a-blog.md");

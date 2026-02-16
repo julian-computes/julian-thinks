@@ -1,7 +1,6 @@
 ---
 title: 'Reflections on Resurrection (2025)'
 description: "Reflections on Bi Gan's epic science fiction drama Resurrection"
-pubDate: 'Feb 16 2026'
 ---
 
 Bi Gan's *Resurrection* tells a classic and familiar story: when humanity discovers that the cause of pain, chaos, and mortality is the act of dreaming, we mostly give it up.

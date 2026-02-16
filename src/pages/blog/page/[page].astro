@@ -1,0 +1,26 @@
+---
+import PostList from '../../../components/PostList.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../consts';
+import { getSortedPosts, paginate } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+	const posts = await getSortedPosts();
+	const { totalPages } = paginate(posts, 1);
+	return Array.from({ length: totalPages - 1 }, (_, i) => ({
+		params: { page: String(i + 2) },
+	}));
+}
+
+const posts = await getSortedPosts();
+const pageNum = Number(Astro.params.page);
+const { items, page, totalPages } = paginate(posts, pageNum);
+---
+
+<PostList
+	posts={items}
+	page={page}
+	totalPages={totalPages}
+	basePath="/blog/"
+	title={SITE_TITLE}
+	description={SITE_DESCRIPTION}
+/>

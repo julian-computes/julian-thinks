@@ -1,0 +1,35 @@
+---
+import PostList from '../../../../components/PostList.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../../../consts';
+import {
+	filterByPrefix,
+	getSortedPosts,
+	getUniqueMonths,
+	getUniqueYears,
+	paginate,
+} from '../../../../lib/blog';
+
+export async function getStaticPaths() {
+	const posts = await getSortedPosts();
+	const paths: { params: { year: string; month: string } }[] = [];
+	for (const year of getUniqueYears(posts)) {
+		for (const month of getUniqueMonths(posts, year)) {
+			paths.push({ params: { year, month } });
+		}
+	}
+	return paths;
+}
+
+const { year, month } = Astro.params;
+const posts = filterByPrefix(await getSortedPosts(), `${year}/${month}/`);
+const { items, page, totalPages } = paginate(posts, 1);
+---
+
+<PostList
+	posts={items}
+	page={page}
+	totalPages={totalPages}
+	basePath={`/blog/${year}/${month}/`}
+	title={`${year}/${month} — ${SITE_TITLE}`}
+	description={SITE_DESCRIPTION}
+/>

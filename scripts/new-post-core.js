@@ -21,14 +21,6 @@ export function toDateDir(date) {
   return path.join(year, month, day);
 }
 
-export function toPubDate(date) {
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  });
-}
-
 export function toDisplayTitle(slug) {
   return slug.replaceAll("-", " ");
 }
@@ -75,14 +67,12 @@ export function buildPostPath({
 
 export function buildFrontmatter({
   title,
-  pubDate,
   description = DEFAULT_DESCRIPTION,
 }) {
   return [
     "---",
     `title: '${title}'`,
     `description: '${description}'`,
-    `pubDate: '${pubDate}'`,
     "---",
     "",
   ].join("\n");
@@ -95,16 +85,14 @@ export function createNewPostPlan({
   directory = BLOG_DIR,
 }) {
   const dateDir = toDateDir(now);
-  const pubDate = toPubDate(now);
   const index = getNextIndex(existingFileNames);
   const title = toDisplayTitle(slug);
   const fileName = buildPostFileName({ index, slug });
   const filePath = path.join(directory, dateDir, fileName);
-  const content = buildFrontmatter({ title, pubDate });
+  const content = buildFrontmatter({ title });
 
   return {
     dateDir,
-    pubDate,
     index,
     title,
     fileName,
