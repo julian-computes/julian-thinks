@@ -13,6 +13,7 @@ concurrency: # prevent concurrent deploys doing strange things
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: deploy
 
     steps:
     # The checkout step copies your repo into the action runner. Important!
@@ -29,9 +30,11 @@ jobs:
       run: |
         npm i
         npm run build
-    - name: Deploy to Neocities
-      uses: bcomnes/deploy-to-neocities@v1.1.13
+    - name: Deploy to neocities
+      uses: bcomnes/deploy-to-neocities@v3.0.4
       with:
-        api_token: ${{ secrets.NEOCITIES_API_KEY }}
-        cleanup: false
+        api_key: ${{ secrets.NEOCITIES_API_TOKEN }}
+        cleanup: true
+        neocities_supporter: true # set this to true if you have a supporter account and want to bypass unsuported files filter.
+        preview_before_deploy: true # print a deployment plan prior to waiting for files to upload.
         dist_dir: dist
