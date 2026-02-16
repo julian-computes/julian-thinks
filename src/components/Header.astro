@@ -5,9 +5,8 @@ import HeaderLink from './HeaderLink.astro';
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
+		<a class="site-title" href="/">{SITE_TITLE}</a>
+		<div class="nav-links">
 			<HeaderLink href="/blog">Blog</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
 		</div>
@@ -16,68 +15,36 @@ import HeaderLink from './HeaderLink.astro';
 
 <style>
 	header {
-		margin-bottom: 2rem;
+		margin-bottom: 2.5rem;
+		border-bottom: 1px solid rgba(128, 128, 128, 0.2);
 	}
 
 	nav {
 		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
 		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.75rem 1rem;
-		padding: 0.5rem 0;
+		gap: 0.5rem 2rem;
+		padding: 1.25rem 0;
 	}
 
-	h2 {
-		margin: 0;
-		font-size: 1.15rem;
-		line-height: 1.2;
-	}
-
-	h2 a {
+	.site-title {
+		font-size: 1.1rem;
+		font-weight: 700;
+		letter-spacing: 0.02em;
 		text-decoration: none;
 		color: inherit;
+		transition: opacity 150ms ease;
 	}
 
-	h2 a:hover,
-	h2 a:focus-visible {
-		text-decoration: underline;
-		text-underline-offset: 0.15em;
+	.site-title:hover,
+	.site-title:focus-visible {
+		opacity: 0.6;
 	}
 
-	.internal-links {
+	.nav-links {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.35rem;
-		margin-left: 0.5rem;
-	}
-
-	.social-links {
-		margin-left: auto;
-	}
-
-	.social-links :global(a) {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		color: inherit;
-		opacity: 0.75;
-		transition: opacity 120ms ease;
-	}
-
-	.social-links :global(a:hover),
-	.social-links :global(a:focus-visible) {
-		opacity: 1;
-	}
-
-	.social-links :global(svg) {
-		width: 1.2rem;
-		height: 1.2rem;
-	}
-
-	@media (max-width: 50rem) {
-		.social-links {
-			margin-left: 0;
-		}
+		gap: 0.25rem;
 	}
 </style>
 
