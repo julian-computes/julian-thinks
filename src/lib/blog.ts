@@ -1,17 +1,17 @@
-import type { CollectionEntry } from "astro:content";
-import { getCollection } from "astro:content";
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 export const PAGE_SIZE = 10;
 
-export type BlogPost = CollectionEntry<"blog">;
+export type BlogPost = CollectionEntry<'blog'>;
 
 export function pubDateFromId(id: string): Date {
-	const [year, month, day] = id.split("/");
+	const [year, month, day] = id.split('/');
 	return new Date(Number(year), Number(month) - 1, Number(day));
 }
 
 export async function getSortedPosts(): Promise<BlogPost[]> {
-	const posts = await getCollection("blog");
+	const posts = await getCollection('blog');
 	return posts.sort(
 		(a, b) => pubDateFromId(b.id).valueOf() - pubDateFromId(a.id).valueOf(),
 	);
@@ -43,15 +43,18 @@ export function paginate(posts: BlogPost[], page: number): Page {
 }
 
 export function getUniqueYears(posts: BlogPost[]): string[] {
-	const years = new Set(posts.map((post) => post.id.split("/")[0]));
+	const years = new Set(posts.map((post) => post.id.split('/')[0]));
 	return [...years].sort().reverse();
 }
 
-export function getUniqueMonths(posts: BlogPost[], year: string): string[] {
+export function getUniqueMonths(
+	posts: BlogPost[],
+	year: string,
+): string[] {
 	const months = new Set(
 		posts
 			.filter((post) => post.id.startsWith(`${year}/`))
-			.map((post) => post.id.split("/")[1]),
+			.map((post) => post.id.split('/')[1]),
 	);
 	return [...months].sort().reverse();
 }

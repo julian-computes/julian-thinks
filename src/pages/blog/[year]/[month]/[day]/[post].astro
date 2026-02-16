@@ -1,21 +1,21 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
-import BlogPost from "../../../../../layouts/Content.astro";
-import { pubDateFromId } from "../../../../../lib/blog";
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../../../../layouts/Content.astro';
+import { pubDateFromId } from '../../../../../lib/blog';
 
 export async function getStaticPaths() {
-	const posts = await getCollection("blog");
+	const posts = await getCollection('blog');
 	return posts.map((post) => {
-		const [year, month, day, ...rest] = post.id.split("/");
+		const [year, month, day, ...rest] = post.id.split('/');
 		return {
-			params: { year, month, day, post: rest.join("/") },
+			params: { year, month, day, post: rest.join('/') },
 			props: { entry: post },
 		};
 	});
 }
 
 interface Props {
-	entry: CollectionEntry<"blog">;
+	entry: CollectionEntry<'blog'>;
 }
 
 const { entry } = Astro.props;
