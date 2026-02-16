@@ -1,7 +1,7 @@
 ---
-import PostList from "../../components/PostList.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
-import { getSortedPosts, paginate } from "../../lib/blog";
+import PostList from "@/components/PostList.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import { getSortedPosts, paginate } from "@/lib/blog";
 
 const posts = await getSortedPosts();
 const { items, page, totalPages } = paginate(posts, 1);
